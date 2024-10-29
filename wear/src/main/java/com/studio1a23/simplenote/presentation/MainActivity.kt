@@ -1,0 +1,180 @@
+/* While this template provides a good starting point for using Wear Compose, you can always
+ * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
+ * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
+ * changes to the libraries and their usages.
+ */
+
+package com.studio1a23.simplenote.presentation
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.createGraph
+import androidx.wear.compose.material.Card
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.material.CompactChip
+import com.studio1a23.simplenote.presentation.theme.SimpleNoteTheme
+import com.studio1a23.simplenote.ui.Edit
+import com.studio1a23.simplenote.ui.EditNoteType
+import com.studio1a23.simplenote.viewModel.MainViewModel
+
+class MainActivity : ComponentActivity() {
+    internal lateinit var navController: NavHostController
+
+    private val viewModel by viewModels<MainViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
+        super.onCreate(savedInstanceState)
+
+        setTheme(android.R.style.Theme_DeviceDefault)
+
+        setContent {
+            navController = rememberSwipeDismissableNavController()
+            WearApp(swipeDismissableNavController = navController, viewModel = viewModel)
+            LaunchedEffect(Unit) {
+                viewModel.loadData()
+                intent?.getStringExtra("destination")?.let { destination ->
+                    navController.navigate(destination, NavOptions.Builder().setLaunchSingleTop(true).build())
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.init()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.unload()
+    }
+}
+
+@Composable
+fun WearApp(
+    modifier: Modifier = Modifier,
+    swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
+    viewModel: MainViewModel,
+) {
+    SimpleNoteTheme {
+        AppScaffold() {
+            swipeDismissableNavController.setLifecycleOwner(LocalLifecycleOwner.current)
+            swipeDismissableNavController.setViewModelStore(LocalViewModelStoreOwner.current!!.viewModelStore)
+            swipeDismissableNavController.graph = remember {
+                swipeDismissableNavController.createGraph(
+                    startDestination = "home"
+                ) {
+                    composable(
+                        route = "home"
+                    ) {
+                        Greeting(greetingName = viewModel.noteContent.value, onNavEdit = { swipeDismissableNavController.navigate("edit") })
+                    }
+                    composable(
+                        route = "edit"
+                    ) {
+                        Edit(
+                            viewModel,
+                            onSave = {swipeDismissableNavController.popBackStack()},
+                            onChangeNoteType = {swipeDismissableNavController.navigate("editNoteType") }
+                        )
+                    }
+                    composable(
+                        route = "editNoteType"
+                    ) {
+                        EditNoteType(viewModel)
+                    }
+                }
+            }
+            SwipeDismissableNavHost(
+                modifier = modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(),
+                navController = swipeDismissableNavController,
+                graph = swipeDismissableNavController.graph,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalHorologistApi::class)
+@Composable
+fun Greeting(greetingName: String, onNavEdit: () -> Unit = {}) {
+    val columnState = rememberResponsiveColumnState(
+        contentPadding = ScalingLazyColumnDefaults.padding(
+            first = ScalingLazyColumnDefaults.ItemType.Card,
+            last = ScalingLazyColumnDefaults.ItemType.Chip
+        ),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                space = 2.dp,
+                alignment = Alignment.CenterVertically,
+            ),
+    )
+    ScalingLazyColumn(
+        columnState = columnState,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        item {
+            Card(onClick = {}, enabled = false, ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colors.primary,
+    //            text = stringResource(R.string.hello_world, greetingName)
+                    text = greetingName
+                )
+            }
+        }
+        item {
+            CompactChip(label = "Edit", onClick = onNavEdit)
+        }
+        item {
+            CompactChip(
+                label = "History",
+                onClick = { },
+                colors = ChipDefaults.secondaryChipColors()
+            )
+        }
+    }
+}
+
+@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Composable
+fun GreetingPreview() {
+    SimpleNoteTheme {
+        Greeting(greetingName = "Hello, World!")
+    }
+}
+
