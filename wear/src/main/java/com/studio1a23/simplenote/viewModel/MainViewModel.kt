@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.KeyboardType
@@ -13,16 +15,17 @@ import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
+import com.studio1a23.simplenote.data.NoteHistory
 import com.studio1a23.simplenote.tile.MainTileService
 import kotlinx.coroutines.flow.MutableStateFlow
 
+val MAX_HISTORY_SIZE = 10
 
 class MainViewModel(private val application: Application) : AndroidViewModel(application),
     DataClient.OnDataChangedListener {
 
     val dataClient by lazy { Wearable.getDataClient(application) }
 
-    var noteContent = mutableStateOf("")
     var noteContentFlow = MutableStateFlow("")
     var noteType = mutableStateOf("")
     var noteTypeEnum = derivedStateOf { when (noteType.value) {
@@ -38,6 +41,8 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         else -> KeyboardType.Number
     } }
 
+    var noteHistoriesFlow = MutableStateFlow(mutableListOf<NoteHistory>())
+
     fun init() {
         Log.d("dataMap", "On init.")
         dataClient.addListener(this)
@@ -51,11 +56,13 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                 val dataMap = DataMapItem.fromDataItem(item).dataMap
                 Log.d("dataMap", "Loading data map: $dataMap")
                 if (dataMap.containsKey("note")) {
-                    noteContent.value = dataMap.getString("note") ?: ""
                     noteContentFlow.value = dataMap.getString("note") ?: ""
                 }
                 if (dataMap.containsKey("type")) {
                     noteType.value = dataMap.getString("type") ?: ""
+                }
+                if (dataMap.containsKey("history")) {
+                    noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList("history"))
                 }
             }
         }.addOnFailureListener { e ->
@@ -70,8 +77,10 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     @SuppressLint("VisibleForTests")
     fun saveNote(note: String) {
         Log.d("dataMap", "Saving note: $note")
-        noteContent.value = note
         noteContentFlow.value = note
+        if (note.isNotBlank() && noteHistoriesFlow.value.lastOrNull()?.note != note) {
+            noteHistoriesFlow.value.add(NoteHistory(note, System.currentTimeMillis()))
+        }
         saveToDataClient()
         MainTileService.forceTileUpdate(application)
     }
@@ -86,7 +95,13 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     fun saveToDataClient() {
         val request = PutDataMapRequest.create("/note").apply {
             dataMap.putString("type", noteType.value)
-            dataMap.putString("note", noteContent.value)
+            dataMap.putString("note", noteContentFlow.value)
+            dataMap.putDataMapArrayList("history", ArrayList(
+                noteHistoriesFlow.value
+                    .sortedBy { it.timestamp }
+                    .takeLast(MAX_HISTORY_SIZE)
+                    .map { it.toDataMap() }
+            ))
         }.asPutDataRequest()
         dataClient.putDataItem(request).addOnSuccessListener {
             Log.d("dataMap", "Data item set: $it")
@@ -103,10 +118,13 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
                 dataMap.keySet().forEach {
                     if (it == "note") {
-                        noteContent.value = dataMap.getString(it) ?: ""
+                        noteContentFlow.value = dataMap.getString(it) ?: ""
                     }
                     if (it == "type") {
                         noteType.value = dataMap.getString(it) ?: ""
+                    }
+                    if (it == "history") {
+                        noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList(it))
                     }
                 }
             }

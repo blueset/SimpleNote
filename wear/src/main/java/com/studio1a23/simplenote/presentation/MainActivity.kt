@@ -10,20 +10,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
@@ -36,6 +33,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
@@ -45,6 +43,7 @@ import com.google.android.horologist.compose.material.CompactChip
 import com.studio1a23.simplenote.presentation.theme.SimpleNoteTheme
 import com.studio1a23.simplenote.ui.Edit
 import com.studio1a23.simplenote.ui.EditNoteType
+import com.studio1a23.simplenote.ui.NoteHistory
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -65,7 +64,10 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 viewModel.loadData()
                 intent?.getStringExtra("destination")?.let { destination ->
-                    navController.navigate(destination, NavOptions.Builder().setLaunchSingleTop(true).build())
+                    navController.navigate(
+                        destination,
+                        NavOptions.Builder().setLaunchSingleTop(true).build()
+                    )
                 }
             }
         }
@@ -93,27 +95,26 @@ fun WearApp(
             swipeDismissableNavController.setLifecycleOwner(LocalLifecycleOwner.current)
             swipeDismissableNavController.setViewModelStore(LocalViewModelStoreOwner.current!!.viewModelStore)
             swipeDismissableNavController.graph = remember {
-                swipeDismissableNavController.createGraph(
-                    startDestination = "home"
-                ) {
-                    composable(
-                        route = "home"
-                    ) {
-                        Greeting(greetingName = viewModel.noteContent.value, onNavEdit = { swipeDismissableNavController.navigate("edit") })
-                    }
-                    composable(
-                        route = "edit"
-                    ) {
-                        Edit(
-                            viewModel,
-                            onSave = {swipeDismissableNavController.popBackStack()},
-                            onChangeNoteType = {swipeDismissableNavController.navigate("editNoteType") }
+                swipeDismissableNavController.createGraph(startDestination = "home") {
+                    composable(route = "home") {
+                        Greeting(
+                            noteContent = viewModel.noteContentFlow.collectAsState().value,
+                            onNavEdit = { swipeDismissableNavController.navigate("edit") },
+                            onNavHistory = { swipeDismissableNavController.navigate("history") },
                         )
                     }
-                    composable(
-                        route = "editNoteType"
-                    ) {
+                    composable(route = "edit") {
+                        Edit(
+                            viewModel,
+                            onSave = { swipeDismissableNavController.popBackStack() },
+                            onChangeNoteType = { swipeDismissableNavController.navigate("editNoteType") }
+                        )
+                    }
+                    composable(route = "editNoteType") {
                         EditNoteType(viewModel)
+                    }
+                    composable(route = "history") {
+                        NoteHistory(viewModel)
                     }
                 }
             }
@@ -130,30 +131,24 @@ fun WearApp(
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
-fun Greeting(greetingName: String, onNavEdit: () -> Unit = {}) {
+fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -> Unit = {}) {
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
             first = ScalingLazyColumnDefaults.ItemType.Card,
             last = ScalingLazyColumnDefaults.ItemType.Chip
         ),
-        verticalArrangement =
-            Arrangement.spacedBy(
-                space = 2.dp,
-                alignment = Alignment.CenterVertically,
-            ),
     )
     ScalingLazyColumn(
         columnState = columnState,
         modifier = Modifier.fillMaxSize()
     ) {
         item {
-            Card(onClick = {}, enabled = false, ) {
+            Card(onClick = {}, enabled = false) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.primary,
-    //            text = stringResource(R.string.hello_world, greetingName)
-                    text = greetingName
+                    text = noteContent
                 )
             }
         }
@@ -163,18 +158,18 @@ fun Greeting(greetingName: String, onNavEdit: () -> Unit = {}) {
         item {
             CompactChip(
                 label = "History",
-                onClick = { },
+                onClick = onNavHistory,
                 colors = ChipDefaults.secondaryChipColors()
             )
         }
     }
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     SimpleNoteTheme {
-        Greeting(greetingName = "Hello, World!")
+        Greeting(noteContent = "Hello, World!")
     }
 }
 

@@ -36,7 +36,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
             last = ScalingLazyColumnDefaults.ItemType.Chip
         )
     )
-    val savedValue = remember { mutableStateOf(viewModel.noteContent.value) }
+    val savedValue = remember { mutableStateOf(viewModel.noteContentFlow.value) }
 
     LaunchedEffect(viewModel.noteContentFlow) {
         viewModel.noteContentFlow.collect {
