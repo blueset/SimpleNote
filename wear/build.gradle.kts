@@ -69,9 +69,11 @@ dependencies {
     implementation(libs.androidx.wear.input)
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.tiles.tooling.preview)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.tiles.tooling)
     wearApp(project(":wear"))
 }

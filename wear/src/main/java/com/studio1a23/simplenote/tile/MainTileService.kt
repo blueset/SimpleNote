@@ -6,19 +6,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.TaskStackBuilder
-import androidx.core.graphics.toColor
-import androidx.core.net.toUri
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.ColorBuilders.argb
+import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.StateBuilders
 import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.TypeBuilders
 import androidx.wear.protolayout.expression.AppDataKey
 import androidx.wear.protolayout.expression.DynamicBuilders
 import androidx.wear.protolayout.expression.DynamicDataBuilders
@@ -30,6 +26,9 @@ import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
@@ -38,7 +37,6 @@ import com.google.android.horologist.compose.tools.LayoutRootPreview
 import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.SuspendingTileService
 import com.studio1a23.simplenote.presentation.MainActivity
-import com.studio1a23.simplenote.tile.MainTileService.Companion.KEY_NOTE
 import kotlinx.coroutines.tasks.await
 
 private const val RESOURCES_VERSION = "0"
@@ -87,7 +85,7 @@ class MainTileService : SuspendingTileService() {
 
         val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
             TimelineBuilders.TimelineEntry.Builder().setLayout(
-                LayoutElementBuilders.Layout.Builder().setRoot(tileLayout(this, noteContent)).build()
+                LayoutElementBuilders.Layout.Builder().setRoot(tileLayout(this, requestParams.deviceConfiguration, noteContent)).build()
             ).build()
         ).build()
 
@@ -111,9 +109,10 @@ class MainTileService : SuspendingTileService() {
     }
 }
 
-private fun tileLayout(context: Context, noteContent: String = ""): LayoutElementBuilders.LayoutElement {
+private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuilders.DeviceParameters, noteContent: String = ""): LayoutElementBuilders.LayoutElement {
     val chipColors = ChipColors.primaryChipColors(Colors.DEFAULT)
-    return PrimaryLayout.Builder(buildDeviceParameters(context.resources))
+    return PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, "Quick note")
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -150,7 +149,7 @@ private fun tileLayout(context: Context, noteContent: String = ""): LayoutElemen
                     .setId("foo")
                     .setOnClick(ActionBuilders.LoadAction.Builder().build())
                     .build(),
-                buildDeviceParameters(context.resources)
+                deviceParameters
             )
                 .setChipColors(chipColors)
                 .build()
@@ -158,13 +157,12 @@ private fun tileLayout(context: Context, noteContent: String = ""): LayoutElemen
         ).build()
 }
 
-@Preview(
-    device = WearDevices.LARGE_ROUND,
-    showSystemUi = true,
-    backgroundColor = 0xff000000,
-    showBackground = true
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun tilePreview(context: Context) = TilePreviewData(
+    onTileRequest = { request ->
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            tileLayout(context, request.deviceConfiguration, "Preview note"),
+        ).build()
+    }
 )
-@Composable
-fun TilePreview() {
-    LayoutRootPreview(root = tileLayout(LocalContext.current, "#124"))
-}
