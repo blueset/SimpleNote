@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,12 +17,12 @@ import com.studio1a23.simplenote.data.NoteHistory
 import com.studio1a23.simplenote.tile.MainTileService
 import kotlinx.coroutines.flow.MutableStateFlow
 
-val MAX_HISTORY_SIZE = 10
+const val MAX_HISTORY_SIZE = 10
 
 class MainViewModel(private val application: Application) : AndroidViewModel(application),
     DataClient.OnDataChangedListener {
 
-    val dataClient by lazy { Wearable.getDataClient(application) }
+    private val dataClient by lazy { Wearable.getDataClient(application) }
 
     var noteContentFlow = MutableStateFlow("")
     var noteType = mutableStateOf("")

@@ -13,15 +13,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -47,7 +49,7 @@ import com.studio1a23.simplenote.ui.NoteHistory
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
-    internal lateinit var navController: NavHostController
+    private lateinit var navController: NavHostController
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -134,7 +136,7 @@ fun WearApp(
 fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -> Unit = {}) {
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ScalingLazyColumnDefaults.ItemType.Card,
+            first = ScalingLazyColumnDefaults.ItemType.Icon,
             last = ScalingLazyColumnDefaults.ItemType.Chip
         ),
     )
@@ -142,6 +144,13 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
         columnState = columnState,
         modifier = Modifier.fillMaxSize()
     ) {
+        item {
+            Text(
+                text = "Simple Note",
+                style = MaterialTheme.typography.caption2,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+        }
         item {
             Card(onClick = {}, enabled = false) {
                 Text(

@@ -11,7 +11,7 @@ data class NoteHistory(
             return data?.map {
                 NoteHistory(
                     it.getString("note") ?: "",
-                    it.getLong("timestamp") ?: 0L
+                    it.getLong("timestamp")
                 )
             }?.toMutableList() ?: mutableListOf()
         }
