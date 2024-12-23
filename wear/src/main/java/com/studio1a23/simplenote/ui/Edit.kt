@@ -44,6 +44,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
             savedValue.value = it
         }
     }
+
     ScreenScaffold(scrollState = columnState) {
         ScalingLazyColumn(
             columnState = columnState,
@@ -51,7 +52,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
         ) {
             item {
                 val keyboardController = LocalSoftwareKeyboardController.current
-                val focusRequester = FocusRequester()
+                val focusRequester = remember { FocusRequester() }
                 androidx.wear.compose.material.Chip(
                     label = {
                         BasicTextField(
@@ -76,6 +77,9 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                                 .focusRequester(focusRequester),
 
                         )
+                        LaunchedEffect(Unit) {
+                            focusRequester.requestFocus()
+                        }
                     },
                     onClick = { },
                     modifier = Modifier.fillMaxWidth(),

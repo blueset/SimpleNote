@@ -30,6 +30,7 @@ import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -158,7 +159,7 @@ private fun tileLayout(context: Context, noteContent: String = ""): LayoutElemen
 }
 
 @Preview(
-    device = Devices.WEAR_OS_SMALL_ROUND,
+    device = WearDevices.LARGE_ROUND,
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true
