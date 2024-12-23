@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleNote</string>
+    <string name="app_name">Simple Note</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
@@ -7,4 +7,20 @@
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
     <string name="tile_label">Quick notes</string>
     <string name="complication_label">Example complication</string>
+    <string name="edit">Edit</string>
+    <string name="history">History</string>
+    <string name="quick_note">Quick note</string>
+    <string name="no_note_found">No note found.</string>
+    <string name="note_type">Note type</string>
+    <string name="edit_history">Edit history</string>
+    <string name="no_history">No history</string>
+    <string name="number">Number</string>
+    <string name="text">Text</string>
+    <string name="ascii">Code (ASCII)</string>
+    <string name="phone">Phone number</string>
+    <string name="email">Email</string>
+    <string name="uri">Link (URI)</string>
+    <string name="password">Password</string>
+    <string name="number_password">Number password</string>
+    <string name="decimal">Decimal number</string>
 </resources>

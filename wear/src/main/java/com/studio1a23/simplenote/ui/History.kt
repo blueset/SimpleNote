@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.data.NoteHistory
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
@@ -62,7 +64,7 @@ fun HistoryList(history: List<NoteHistory>) {
         ) {
             item {
                 Text(
-                    text = "Edit history",
+                    text = stringResource(R.string.edit_history),
                     style = MaterialTheme.typography.title3,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -73,7 +75,7 @@ fun HistoryList(history: List<NoteHistory>) {
             if (history.isEmpty()) {
                 item {
                     Text(
-                        text = "No history",
+                        text = stringResource(R.string.no_history),
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(16.dp)
                     )

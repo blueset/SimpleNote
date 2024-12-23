@@ -34,6 +34,8 @@ import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
 import com.studio1a23.simplenote.presentation.MainActivity
 import kotlinx.coroutines.tasks.await
+import androidx.compose.ui.res.stringResource
+import com.studio1a23.simplenote.R
 
 private const val RESOURCES_VERSION = "0"
 
@@ -50,16 +52,16 @@ class MainTileService : SuspendingTileService() {
     }
 
     @SuppressLint("VisibleForTests")
-    private suspend fun getNoteContent(): String {
+    private suspend fun getNoteContent(): String? {
         val dataClient = Wearable.getDataClient(application)
         val dataItems = dataClient.getDataItems(Uri.parse("wear://*/note")).await()
         dataItems.forEach { item ->
             val dataMap = DataMapItem.fromDataItem(item).dataMap
             if (dataMap.containsKey("note")) {
-                return dataMap.getString("note") ?: "No note found."
+                return dataMap.getString("note")
             }
         }
-        return "No note found."
+        return null
     }
 
     override suspend fun tileRequest(
@@ -77,7 +79,7 @@ class MainTileService : SuspendingTileService() {
                 .startActivities()
         }
 
-        val noteContent = getNoteContent()
+        val noteContent = getNoteContent() ?: resources.getString(R.string.no_note_found)
 
         val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
             TimelineBuilders.TimelineEntry.Builder().setLayout(
@@ -107,10 +109,11 @@ class MainTileService : SuspendingTileService() {
 
 private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuilders.DeviceParameters, noteContent: String = ""): LayoutElementBuilders.LayoutElement {
     val chipColors = ChipColors.primaryChipColors(Colors.DEFAULT)
+    val resources = context.resources
     return PrimaryLayout.Builder(deviceParameters)
         .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
-            Text.Builder(context, "Quick note")
+            Text.Builder(context, resources.getString(R.string.quick_note))
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                 .setColor(argb(Colors.DEFAULT.primary))
                 .build()
@@ -141,7 +144,7 @@ private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuild
         )
         .setPrimaryChipContent(
             CompactChip.Builder(
-                context, "Edit", ModifiersBuilders.Clickable.Builder()
+                context, resources.getString(R.string.edit), ModifiersBuilders.Clickable.Builder()
                     .setId("foo")
                     .setOnClick(ActionBuilders.LoadAction.Builder().build())
                     .build(),

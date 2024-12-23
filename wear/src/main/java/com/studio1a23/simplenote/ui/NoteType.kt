@@ -3,6 +3,7 @@ package com.studio1a23.simplenote.ui
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.wear.compose.material.ListHeader
@@ -15,18 +16,19 @@ import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
-val numberFormats = listOf(
-    "Number",
-    "Text",
-    "ASCII",
-    "Phone",
-    "Email",
-    "URI",
-    "Password",
-    "NumberPassword",
-    "Decimal",
+val numberFormats = mapOf(
+    "Number" to R.string.number,
+    "Text" to R.string.text,
+    "ASCII" to R.string.ascii,
+    "Phone" to R.string.phone,
+    "Email" to R.string.email,
+    "URI" to R.string.uri,
+    "Password" to R.string.password,
+    "NumberPassword" to R.string.number_password,
+    "Decimal" to R.string.decimal,
 )
 
 @OptIn(ExperimentalHorologistApi::class)
@@ -46,10 +48,10 @@ fun EditNoteType(
     ) {
         item {
             ListHeader {
-                Text("Note type")
+                Text(stringResource(R.string.note_type))
             }
         }
-        for (format in numberFormats) {
+        for ((format, formatNameRes) in numberFormats) {
             val checked = viewModel.noteType.value == format
             item {
                 ToggleChip(
@@ -69,7 +71,7 @@ fun EditNoteType(
                         checkedToggleControlColor = MaterialTheme.colors.primary,
                     ),
                     label = {
-                        Text(format)
+                        Text(stringResource(formatNameRes))
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

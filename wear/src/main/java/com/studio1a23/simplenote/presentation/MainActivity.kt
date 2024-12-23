@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.CompactChip
+import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.presentation.theme.SimpleNoteTheme
 import com.studio1a23.simplenote.ui.Edit
 import com.studio1a23.simplenote.ui.EditNoteType
@@ -146,7 +148,7 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
     ) {
         item {
             Text(
-                text = "Simple Note",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.caption2,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -162,11 +164,11 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
             }
         }
         item {
-            CompactChip(label = "Edit", onClick = onNavEdit)
+            CompactChip(label = stringResource(R.string.edit), onClick = onNavEdit)
         }
         item {
             CompactChip(
-                label = "History",
+                label = stringResource(R.string.history),
                 onClick = onNavHistory,
                 colors = ChipDefaults.secondaryChipColors()
             )
