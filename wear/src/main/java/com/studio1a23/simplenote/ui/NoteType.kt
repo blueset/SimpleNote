@@ -20,15 +20,15 @@ import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
 val numberFormats = mapOf(
-    "Number" to R.string.number,
-    "Text" to R.string.text,
-    "ASCII" to R.string.ascii,
-    "Phone" to R.string.phone,
-    "Email" to R.string.email,
-    "URI" to R.string.uri,
-    "Password" to R.string.password,
-    "NumberPassword" to R.string.number_password,
-    "Decimal" to R.string.decimal,
+    "Number" to R.string.note_type_number,
+    "Text" to R.string.note_type_text,
+    "ASCII" to R.string.note_type_ascii,
+    "Phone" to R.string.note_type_phone,
+    "Email" to R.string.note_type_email,
+    "URI" to R.string.note_type_uri,
+    "Password" to R.string.note_type_password,
+    "NumberPassword" to R.string.note_type_number_password,
+    "Decimal" to R.string.note_type_decimal,
 )
 
 @OptIn(ExperimentalHorologistApi::class)
@@ -43,6 +43,12 @@ fun EditNoteType(
         )
     )
 
+    val noteType = if (viewModel.noteType.value in numberFormats) {
+        viewModel.noteType.value
+    } else {
+        "Text"
+    }
+
     ScalingLazyColumn(
         columnState = columnState
     ) {
@@ -52,7 +58,7 @@ fun EditNoteType(
             }
         }
         for ((format, formatNameRes) in numberFormats) {
-            val checked = viewModel.noteType.value == format
+            val checked = noteType == format
             item {
                 ToggleChip(
                     checked = checked,

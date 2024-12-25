@@ -30,7 +30,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     private val dataClient by lazy { Wearable.getDataClient(application) }
 
     var noteContentFlow = MutableStateFlow("")
-    var noteType = mutableStateOf("")
+    var noteType = mutableStateOf("Text")
     var noteTypeEnum = derivedStateOf { when (noteType.value) {
         "Number" -> KeyboardType.Number
         "Text" -> KeyboardType.Text
@@ -41,7 +41,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
         "Password" -> KeyboardType.Password
         "NumberPassword" -> KeyboardType.NumberPassword
         "Decimal" -> KeyboardType.Decimal
-        else -> KeyboardType.Number
+        else -> KeyboardType.Text
     } }
 
     var noteHistoriesFlow = MutableStateFlow(mutableListOf<NoteHistory>())
@@ -63,7 +63,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                     noteContentFlow.value = dataMap.getString("note") ?: ""
                 }
                 if (dataMap.containsKey("type")) {
-                    noteType.value = dataMap.getString("type") ?: ""
+                    noteType.value = dataMap.getString("type") ?: "Text"
                 }
                 if (dataMap.containsKey("history")) {
                     noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList("history"))

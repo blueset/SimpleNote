@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -27,6 +28,7 @@ import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.material.CompactChip
+import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
 @OptIn(ExperimentalHorologistApi::class)
@@ -100,7 +102,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
             }
             item {
                 CompactChip(
-                    "Note type: ${viewModel.noteType.value}",
+                    "Note type: ${stringResource(numberFormats.getOrDefault(viewModel.noteType.value, R.string.note_type_text))}",
                     colors = ChipDefaults.secondaryChipColors(),
                     onClick = {
                         viewModel.saveNote(savedValue.value.text)

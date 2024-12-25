@@ -26,7 +26,7 @@ class ShortComplicationService : SuspendingComplicationDataSourceService() {
     }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
-        val noteContent = (getNoteContent(application) ?: resources.getString(R.string.no_note_found_short))
+        val noteContent = getNoteContent(application).orEmpty().ifBlank { resources.getString(R.string.empty_note_short) }
         val shortNoteContent = if (noteContent.length <= MAX_TEXT_LENGTH) {
             noteContent
         } else {

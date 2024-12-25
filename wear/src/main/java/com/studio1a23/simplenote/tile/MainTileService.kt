@@ -1,9 +1,7 @@
 package com.studio1a23.simplenote.tile
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.core.app.TaskStackBuilder
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.ColorBuilders.argb
@@ -28,14 +26,11 @@ import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import androidx.wear.tooling.preview.devices.WearDevices
-import com.google.android.gms.wearable.DataMapItem
-import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
 import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.presentation.MainActivity
 import com.studio1a23.simplenote.utils.getNoteContent
-import kotlinx.coroutines.tasks.await
 
 private const val RESOURCES_VERSION = "0"
 
@@ -66,11 +61,13 @@ class MainTileService : SuspendingTileService() {
                 .startActivities()
         }
 
-        val noteContent = getNoteContent(application) ?: resources.getString(R.string.no_note_found)
+        val noteContent = getNoteContent(application) ?: resources.getString(R.string.empty_note)
 
         val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
             TimelineBuilders.TimelineEntry.Builder().setLayout(
-                LayoutElementBuilders.Layout.Builder().setRoot(tileLayout(this, requestParams.deviceConfiguration, noteContent)).build()
+                LayoutElementBuilders.Layout.Builder()
+                    .setRoot(tileLayout(this, requestParams.deviceConfiguration, noteContent))
+                    .build()
             ).build()
         ).build()
 
@@ -94,13 +91,17 @@ class MainTileService : SuspendingTileService() {
     }
 }
 
-private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuilders.DeviceParameters, noteContent: String = ""): LayoutElementBuilders.LayoutElement {
+private fun tileLayout(
+    context: Context,
+    deviceParameters: DeviceParametersBuilders.DeviceParameters,
+    noteContent: String = ""
+): LayoutElementBuilders.LayoutElement {
     val chipColors = ChipColors.primaryChipColors(Colors.DEFAULT)
     val resources = context.resources
     return PrimaryLayout.Builder(deviceParameters)
         .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
-            Text.Builder(context, resources.getString(R.string.quick_note))
+            Text.Builder(context, resources.getString(R.string.app_name))
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                 .setColor(argb(Colors.DEFAULT.primary))
                 .build()
@@ -111,37 +112,46 @@ private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuild
 //                TypeBuilders.StringProp.Builder(noteContent).setDynamicValue(
 //                    DynamicBuilders.DynamicString.from(KEY_NOTE)
 //                ).build(), TypeBuilders.StringLayoutConstraint.Builder("1234567890\n1234567890").build()
-                noteContent
+                noteContent.ifEmpty { resources.getString(R.string.empty_note) }
             )
                 .setColor(argb(Colors.DEFAULT.onSurface))
                 .setTypography(
-                    when (deviceParameters.screenWidthDp) {
-                        in 0..210 ->
-                            when (noteContent.length) {
-                                in 0..4 -> Typography.TYPOGRAPHY_DISPLAY1
-                                in 5..8 -> Typography.TYPOGRAPHY_DISPLAY2
-                                in 9..10 -> Typography.TYPOGRAPHY_DISPLAY3
-                                in 11..12 -> Typography.TYPOGRAPHY_TITLE1
-                                in 13..24 -> Typography.TYPOGRAPHY_TITLE2
-                                in 25..40 -> Typography.TYPOGRAPHY_TITLE3
-                                in 41..44 -> Typography.TYPOGRAPHY_BODY2
-                                in 45..52 -> Typography.TYPOGRAPHY_CAPTION2
-                                else -> Typography.TYPOGRAPHY_CAPTION3
-                            }
-                        else ->
-                            when (noteContent.length) {
-                                in 0..8 -> Typography.TYPOGRAPHY_DISPLAY1
-                                in 9..10 -> Typography.TYPOGRAPHY_DISPLAY2
-                                in 11..12 -> Typography.TYPOGRAPHY_DISPLAY3
-                                in 13..24 -> Typography.TYPOGRAPHY_TITLE1
-                                in 25..36 -> Typography.TYPOGRAPHY_TITLE2
-                                in 37..48 -> Typography.TYPOGRAPHY_TITLE3
-                                in 49..52 -> Typography.TYPOGRAPHY_BODY2
-                                in 53..64 -> Typography.TYPOGRAPHY_CAPTION2
-                                else -> Typography.TYPOGRAPHY_CAPTION3
-                            }
-                    }
+                    if (noteContent.isBlank())
+                        Typography.TYPOGRAPHY_BODY1
+                    else
+                        when (deviceParameters.screenWidthDp) {
+                            in 0..224 ->
+                                when (noteContent.length) {
+                                    in 0..4 -> Typography.TYPOGRAPHY_DISPLAY1
+                                    in 5..8 -> Typography.TYPOGRAPHY_DISPLAY2
+                                    in 9..10 -> Typography.TYPOGRAPHY_DISPLAY3
+                                    in 11..12 -> Typography.TYPOGRAPHY_TITLE1
+                                    in 13..24 -> Typography.TYPOGRAPHY_TITLE2
+                                    in 25..40 -> Typography.TYPOGRAPHY_TITLE3
+                                    in 41..44 -> Typography.TYPOGRAPHY_BODY2
+                                    in 45..52 -> Typography.TYPOGRAPHY_CAPTION2
+                                    else -> Typography.TYPOGRAPHY_CAPTION3
+                                }
+
+                            else ->
+                                when (noteContent.length) {
+                                    in 0..8 -> Typography.TYPOGRAPHY_DISPLAY1
+                                    in 9..10 -> Typography.TYPOGRAPHY_DISPLAY2
+                                    in 11..12 -> Typography.TYPOGRAPHY_DISPLAY3
+                                    in 13..24 -> Typography.TYPOGRAPHY_TITLE1
+                                    in 25..36 -> Typography.TYPOGRAPHY_TITLE2
+                                    in 37..48 -> Typography.TYPOGRAPHY_TITLE3
+                                    in 49..52 -> Typography.TYPOGRAPHY_BODY2
+                                    in 53..64 -> Typography.TYPOGRAPHY_CAPTION2
+                                    else -> Typography.TYPOGRAPHY_CAPTION3
+                                }
+                        }
                 )
+                .also {
+                    if (noteContent.isBlank()) {
+                        it.setItalic(true).setColor(argb(Colors.DEFAULT.onSurface and 0x7FFFFFFF))
+                    }
+                }
                 .setMaxLines(4)
                 .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_TRUNCATE)
                 .build()
@@ -165,7 +175,11 @@ private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuild
 fun tilePreview(context: Context) = TilePreviewData(
     onTileRequest = { request ->
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-            tileLayout(context, request.deviceConfiguration, "Test note lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+            tileLayout(
+                context,
+                request.deviceConfiguration,
+                ""
+            ),
         ).build()
     }
 )

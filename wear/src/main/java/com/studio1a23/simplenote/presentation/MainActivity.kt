@@ -20,6 +20,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -158,8 +160,10 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colors.primary,
-                    text = noteContent
+                    color = if (noteContent.isNotBlank()) MaterialTheme.colors.primary else MaterialTheme.colors.onSurfaceVariant,
+                    fontStyle = if (noteContent.isNotBlank()) FontStyle.Normal else FontStyle.Italic,
+                    fontWeight = FontWeight.Normal,
+                    text = noteContent.ifBlank { stringResource(R.string.empty_note) },
                 )
             }
         }
@@ -177,10 +181,11 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     SimpleNoteTheme {
-        Greeting(noteContent = "Hello, World!")
+        Greeting(noteContent = "")
     }
 }
 
