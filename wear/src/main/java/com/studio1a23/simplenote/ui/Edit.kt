@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.MaterialTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -36,12 +38,19 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
             last = ScalingLazyColumnDefaults.ItemType.Chip
         )
     )
-    val savedValue = remember { mutableStateOf(viewModel.noteContentFlow.value) }
+    val savedValue = remember {
+        mutableStateOf(
+            TextFieldValue(
+                viewModel.noteContentFlow.value,
+                selection = TextRange(viewModel.noteContentFlow.value.length)
+            )
+        )
+    }
 
     LaunchedEffect(viewModel.noteContentFlow) {
         viewModel.noteContentFlow.collect {
             Log.d("Edit", "Edit update savedValue to: $it")
-            savedValue.value = it
+            savedValue.value = savedValue.value.copy(text = it)
         }
     }
 
@@ -73,15 +82,17 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                                 color = MaterialTheme.colors.onSurface,
                             ),
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .background(MaterialTheme.colors.surface)
                                 .focusRequester(focusRequester),
-
                         )
                         LaunchedEffect(Unit) {
                             focusRequester.requestFocus()
                         }
                     },
-                    onClick = { },
+                    onClick = {
+                        focusRequester.requestFocus()
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ChipDefaults.secondaryChipColors(),
                     contentPadding = ChipDefaults.ContentPadding,
@@ -92,7 +103,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                     "Note type: ${viewModel.noteType.value}",
                     colors = ChipDefaults.secondaryChipColors(),
                     onClick = {
-                        viewModel.saveNote(savedValue.value)
+                        viewModel.saveNote(savedValue.value.text)
                         onChangeNoteType()
                     }
                 )
@@ -101,7 +112,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                 Chip(
                     "Save",
                     onClick = {
-                        viewModel.saveNote(savedValue.value)
+                        viewModel.saveNote(savedValue.value.text)
                         onSave()
                     }
                 )

@@ -32,10 +32,10 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
-import com.studio1a23.simplenote.presentation.MainActivity
-import kotlinx.coroutines.tasks.await
-import androidx.compose.ui.res.stringResource
 import com.studio1a23.simplenote.R
+import com.studio1a23.simplenote.presentation.MainActivity
+import com.studio1a23.simplenote.utils.getNoteContent
+import kotlinx.coroutines.tasks.await
 
 private const val RESOURCES_VERSION = "0"
 
@@ -51,24 +51,11 @@ class MainTileService : SuspendingTileService() {
         return ResourceBuilders.Resources.Builder().setVersion(RESOURCES_VERSION).build()
     }
 
-    @SuppressLint("VisibleForTests")
-    private suspend fun getNoteContent(): String? {
-        val dataClient = Wearable.getDataClient(application)
-        val dataItems = dataClient.getDataItems(Uri.parse("wear://*/note")).await()
-        dataItems.forEach { item ->
-            val dataMap = DataMapItem.fromDataItem(item).dataMap
-            if (dataMap.containsKey("note")) {
-                return dataMap.getString("note")
-            }
-        }
-        return null
-    }
-
     override suspend fun tileRequest(
         requestParams: RequestBuilders.TileRequest
     ): TileBuilders.Tile {
         val lastClickableId = requestParams.currentState.lastClickableId
-        if (lastClickableId == "foo") {
+        if (lastClickableId == "editNote") {
             TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(
                     Intent(applicationContext, MainActivity::class.java).putExtra(
@@ -79,7 +66,7 @@ class MainTileService : SuspendingTileService() {
                 .startActivities()
         }
 
-        val noteContent = getNoteContent() ?: resources.getString(R.string.no_note_found)
+        val noteContent = getNoteContent(application) ?: resources.getString(R.string.no_note_found)
 
         val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
             TimelineBuilders.TimelineEntry.Builder().setLayout(
@@ -127,25 +114,42 @@ private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuild
                 noteContent
             )
                 .setColor(argb(Colors.DEFAULT.onSurface))
-                    .setTypography(when (noteContent.length) {
-                        in 0..4 -> Typography.TYPOGRAPHY_DISPLAY1
-                        in 5..8 -> Typography.TYPOGRAPHY_DISPLAY2
-                        in 9..10 -> Typography.TYPOGRAPHY_DISPLAY3
-                        in 11..12 -> Typography.TYPOGRAPHY_TITLE1
-                        in 13..24 -> Typography.TYPOGRAPHY_TITLE2
-                        in 25..40 -> Typography.TYPOGRAPHY_TITLE3
-                        in 41..44 -> Typography.TYPOGRAPHY_BODY2
-                        in 45..52 -> Typography.TYPOGRAPHY_CAPTION2
-                    else -> Typography.TYPOGRAPHY_CAPTION3
-                })
+                .setTypography(
+                    when (deviceParameters.screenWidthDp) {
+                        in 0..210 ->
+                            when (noteContent.length) {
+                                in 0..4 -> Typography.TYPOGRAPHY_DISPLAY1
+                                in 5..8 -> Typography.TYPOGRAPHY_DISPLAY2
+                                in 9..10 -> Typography.TYPOGRAPHY_DISPLAY3
+                                in 11..12 -> Typography.TYPOGRAPHY_TITLE1
+                                in 13..24 -> Typography.TYPOGRAPHY_TITLE2
+                                in 25..40 -> Typography.TYPOGRAPHY_TITLE3
+                                in 41..44 -> Typography.TYPOGRAPHY_BODY2
+                                in 45..52 -> Typography.TYPOGRAPHY_CAPTION2
+                                else -> Typography.TYPOGRAPHY_CAPTION3
+                            }
+                        else ->
+                            when (noteContent.length) {
+                                in 0..8 -> Typography.TYPOGRAPHY_DISPLAY1
+                                in 9..10 -> Typography.TYPOGRAPHY_DISPLAY2
+                                in 11..12 -> Typography.TYPOGRAPHY_DISPLAY3
+                                in 13..24 -> Typography.TYPOGRAPHY_TITLE1
+                                in 25..36 -> Typography.TYPOGRAPHY_TITLE2
+                                in 37..48 -> Typography.TYPOGRAPHY_TITLE3
+                                in 49..52 -> Typography.TYPOGRAPHY_BODY2
+                                in 53..64 -> Typography.TYPOGRAPHY_CAPTION2
+                                else -> Typography.TYPOGRAPHY_CAPTION3
+                            }
+                    }
+                )
                 .setMaxLines(4)
-                .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_ELLIPSIZE)
+                .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_TRUNCATE)
                 .build()
         )
         .setPrimaryChipContent(
             CompactChip.Builder(
                 context, resources.getString(R.string.edit), ModifiersBuilders.Clickable.Builder()
-                    .setId("foo")
+                    .setId("editNote")
                     .setOnClick(ActionBuilders.LoadAction.Builder().build())
                     .build(),
                 deviceParameters
@@ -161,7 +165,7 @@ private fun tileLayout(context: Context, deviceParameters: DeviceParametersBuild
 fun tilePreview(context: Context) = TilePreviewData(
     onTileRequest = { request ->
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-            tileLayout(context, request.deviceConfiguration, "Preview note"),
+            tileLayout(context, request.deviceConfiguration, "Test note lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
         ).build()
     }
 )

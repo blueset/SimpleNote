@@ -2,20 +2,25 @@ package com.studio1a23.simplenote.viewModel
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ComponentName
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.AndroidViewModel
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
+import com.studio1a23.simplenote.complication.LongComplicationService
+import com.studio1a23.simplenote.complication.ShortComplicationService
 import com.studio1a23.simplenote.data.NoteHistory
 import com.studio1a23.simplenote.tile.MainTileService
 import kotlinx.coroutines.flow.MutableStateFlow
+
 
 const val MAX_HISTORY_SIZE = 10
 
@@ -49,7 +54,8 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     @SuppressLint("VisibleForTests")
     fun loadData() {
         Log.d("dataMap", "Loading data.")
-        dataClient.getDataItems(Uri.parse("wear://*/note")).addOnSuccessListener { items ->
+        val dataItems = dataClient.getDataItems(Uri.parse("wear://*/note"))
+        dataItems.addOnSuccessListener { items ->
             items.forEach { item ->
                 val dataMap = DataMapItem.fromDataItem(item).dataMap
                 Log.d("dataMap", "Loading data map: $dataMap")
@@ -63,6 +69,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                     noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList("history"))
                 }
             }
+            items.release()
         }.addOnFailureListener { e ->
             Log.e("dataMap", "Failed to get data item: $e\n${e.message}\n${e.stackTraceToString()}")
         }
@@ -106,6 +113,17 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
             val dataMap = DataMapItem.fromDataItem(it).dataMap
             Log.d("dataMap", "Data item set: $dataMap")
         }
+
+        ComplicationDataSourceUpdateRequester.create(
+            application, ComponentName(
+                application, ShortComplicationService::class.java
+            )
+        ).requestUpdateAll()
+        ComplicationDataSourceUpdateRequester.create(
+            application, ComponentName(
+                application, LongComplicationService::class.java
+            )
+        ).requestUpdateAll()
     }
 
     @SuppressLint("VisibleForTests")

@@ -11,6 +11,7 @@
     <string name="history">History</string>
     <string name="quick_note">Quick note</string>
     <string name="no_note_found">No note found.</string>
+    <string name="no_note_found_short">N/A</string>
     <string name="note_type">Note type</string>
     <string name="edit_history">Edit history</string>
     <string name="no_history">No history</string>
@@ -23,4 +24,8 @@
     <string name="password">Password</string>
     <string name="number_password">Number password</string>
     <string name="decimal">Decimal number</string>
+    <string name="short_note_complication">Note (Short)</string>
+    <string name="long_note_complication">Note (Long)</string>
+    <string name="sample_note_short">My note</string>
+    <string name="sample_note_long">Hello, world!</string>
 </resources>
