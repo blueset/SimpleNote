@@ -152,8 +152,8 @@ private fun tileLayout(
                         it.setItalic(true).setColor(argb(Colors.DEFAULT.onSurface and 0x7FFFFFFF))
                     }
                 }
-                .setMaxLines(4)
-                .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_TRUNCATE)
+                .setMaxLines(if (deviceParameters.screenWidthDp < 225) 5 else 7)
+                .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_UNDEFINED)
                 .build()
         )
         .setPrimaryChipContent(
