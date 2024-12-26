@@ -172,13 +172,15 @@ private fun tileLayout(
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.RECT)
+@Preview(device = WearDevices.SQUARE)
 fun tilePreview(context: Context) = TilePreviewData(
     onTileRequest = { request ->
         TilePreviewHelper.singleTimelineEntryTileBuilder(
             tileLayout(
                 context,
                 request.deviceConfiguration,
-                ""
+                "Hello, World!"
             ),
         ).build()
     }

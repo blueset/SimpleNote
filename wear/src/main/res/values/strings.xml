@@ -1,6 +1,6 @@
 <resources>
     <!-- App name -->
-    <string name="app_name">Simple Note</string>
+    <string name="app_name">Simple Memo</string>
     <!-- Edit (verb, button label) -->
     <string name="edit">Edit</string>
     <!-- History (button label) -->
