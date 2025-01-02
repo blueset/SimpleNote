@@ -4,9 +4,8 @@ Simple Memo for Wear OS keeps your essential information just a glance away on y
 
 This lightweight app lets you quickly note down and edit a single piece of important information right on your Wear OS watch. Access your memo instantly through the app, a customizable watch face complication, or a convenient Wear OS tile.
 
-| Quick access to your essential notes | Integrated watchface complications | Keep information at a glance | Choose your preferred keyboard options | Track your edit history |
+| ![Quick access to your essential notes](assets/Screenshot%200.png) | ![Integrated watchface complications](assets/Screenshot%202.png) | ![Keep information at a glance](assets/Screenshot%203.png) | ![Choose your preferred keyboard options](assets/Screenshot%201.png) | ![Track your edit history](assets/Screenshot%204.png) |
 | :--: | :--: | :--: | :--: | :--: |
-| ![Screenshot](assets/Screenshot%200.png) | ![Screenshot](assets/Screenshot%202.png) | ![Screenshot](assets/Screenshot%203.png) | ![Screenshot](assets/Screenshot%201.png) | ![Screenshot](assets/Screenshot%204.png) |
 
 ## Key Features
 
