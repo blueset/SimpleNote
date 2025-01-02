@@ -1,5 +1,6 @@
 package com.studio1a23.simplenote.ui
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +22,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.material.CompactChip
 import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.viewModel.MainViewModel
@@ -37,7 +43,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
             first = ScalingLazyColumnDefaults.ItemType.Chip,
-            last = ScalingLazyColumnDefaults.ItemType.Chip
+            last = ScalingLazyColumnDefaults.ItemType.SingleButton
         )
     )
     val savedValue = remember {
@@ -111,20 +117,25 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                 )
             }
             item {
-                Chip(
-                    "Save",
+                Button(
                     onClick = {
                         viewModel.saveNote(savedValue.value.text)
                         onSave()
-                    }
-                )
+                    },
+                    enabled = true,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Done,
+                        contentDescription = stringResource(R.string.save),
+                    )
+                }
             }
         }
     }
 }
 
-//@Composable
-//@Preview(device = "spec:width=384px,height=884px,dpi=320,isRound=true")
-//fun EditPreview() {
-//    Edit()
-//}
+@Composable
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true, showBackground = true)
+fun EditPreview() {
+    Edit(MainViewModel(Application()), {}, {})
+}

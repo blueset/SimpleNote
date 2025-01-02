@@ -36,4 +36,5 @@
     <string name="sample_note_short">My note</string>
     <!-- Sample note content to display in the Long Note Compilation -->
     <string name="sample_note_long">Hello, world!</string>
+    <string name="save">Save</string>
 </resources>

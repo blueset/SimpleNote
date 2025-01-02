@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.studio1a23.simplenote"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.studio1a23.simplenote"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 341000000 // 34=targetSdk, 01.00.00, build#00, multiApkVariant=00
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Card
+import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
@@ -63,11 +64,7 @@ fun HistoryList(history: List<NoteHistory>) {
             modifier = Modifier.fillMaxSize()
         ) {
             item {
-                Text(
-                    text = stringResource(R.string.edit_history),
-                    style = MaterialTheme.typography.title3,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                ListHeader { Text(stringResource(R.string.edit_history)) }
             }
             items(history.count()) { idx ->
                 NoteCard(history[idx])
