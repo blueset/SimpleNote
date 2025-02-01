@@ -1,40 +1,38 @@
 <resources>
     <!-- App name -->
     <string name="app_name">Simple Memo</string>
-    <!-- Edit (verb, button label) -->
-    <string name="edit">Edit</string>
-    <!-- History (button label) -->
-    <string name="history">History</string>
-    <!-- Note to display when the stored note is empty -->
+    <string name="button_edit">Edit</string>
+    <string name="button_history">History</string>
+    <!-- TRANSLATOR: Note to display when the stored note is empty -->
     <string name="empty_note">Note is empty.</string>
     <!--
-        Note to display in the Short Note Compilation when the stored note is empty.
+        TRANSLATOR: Note to display in the Short Note Compilation when the stored note is empty.
         Do not exceed 7 characters.
     -->
     <string name="empty_note_short">N/A</string>
     <string name="note_type">Note type</string>
-    <!-- Edit history (noun, title of page) -->
-    <string name="edit_history">Edit history</string>
+    <!-- TRANSLATOR: Edit history (noun, title of page) -->
+    <string name="title_edit_history">Edit history</string>
     <string name="no_history">No history</string>
     <string name="note_type_number">Number</string>
     <string name="note_type_text">Text</string>
     <string name="note_type_ascii">Code (ASCII)</string>
     <string name="note_type_phone">Phone number</string>
     <string name="note_type_email">Email</string>
-    <string name="note_type_uri">Link (URI)</string>
+    <string name="note_type_uri">URI</string>
     <string name="note_type_password">Password</string>
     <string name="note_type_number_password">Number password</string>
     <string name="note_type_decimal">Decimal number</string>
-    <!-- Name of the short note compilation -->
+    <!-- TRANSLATOR: Name of the short note compilation -->
     <string name="short_note_complication">Note (Short)</string>
-    <!-- Name of the long note compilation -->
+    <!-- TRANSLATOR: Name of the long note compilation -->
     <string name="long_note_complication">Note (Long)</string>
     <!--
-        Sample note content to display in the Short Note Compilation.
+        TRANSLATOR: Sample note content to display in the Short Note Compilation.
         Do not exceed 7 characters.
     -->
     <string name="sample_note_short">My note</string>
-    <!-- Sample note content to display in the Long Note Compilation -->
+    <!-- TRANSLATOR: Sample note content to display in the Long Note Compilation -->
     <string name="sample_note_long">Hello, world!</string>
-    <string name="save">Save</string>
+    <string name="button_save">Save</string>
 </resources>

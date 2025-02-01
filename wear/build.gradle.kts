@@ -11,12 +11,11 @@ android {
         applicationId = "com.studio1a23.simplenote"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
         vectorDrawables {
             useSupportLibrary = true
         }
-
     }
 
     buildTypes {

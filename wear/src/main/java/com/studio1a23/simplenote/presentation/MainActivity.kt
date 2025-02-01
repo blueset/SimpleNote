@@ -168,11 +168,11 @@ fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -
             }
         }
         item {
-            CompactChip(label = stringResource(R.string.edit), onClick = onNavEdit)
+            CompactChip(label = stringResource(R.string.button_edit), onClick = onNavEdit)
         }
         item {
             CompactChip(
-                label = stringResource(R.string.history),
+                label = stringResource(R.string.button_history),
                 onClick = onNavHistory,
                 colors = ChipDefaults.secondaryChipColors()
             )

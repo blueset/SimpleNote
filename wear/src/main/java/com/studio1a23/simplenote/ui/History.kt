@@ -64,7 +64,7 @@ fun HistoryList(history: List<NoteHistory>) {
             modifier = Modifier.fillMaxSize()
         ) {
             item {
-                ListHeader { Text(stringResource(R.string.edit_history)) }
+                ListHeader { Text(stringResource(R.string.title_edit_history)) }
             }
             items(history.count()) { idx ->
                 NoteCard(history[idx])

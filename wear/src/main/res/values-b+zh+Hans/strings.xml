@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">编辑</string>
+    <string name="button_history">历史</string>
+    <!-- TRANSLATOR: Note to display when the stored note is empty -->
+    <string name="empty_note">笔记为空。</string>
+    <!--
+        TRANSLATOR: Note to display in the Short Note Compilation when the stored note is empty.
+        Do not exceed 7 characters.
+    -->
+    <string name="empty_note_short">空</string>
+    <string name="note_type">笔记类型</string>
+    <!-- TRANSLATOR: Edit history (noun, title of page) -->
+    <string name="title_edit_history">编辑历史</string>
+    <string name="no_history">无历史记录</string>
+    <string name="note_type_number">数字</string>
+    <string name="note_type_text">文本</string>
+    <string name="note_type_ascii">代码 (ASCII)</string>
+    <string name="note_type_phone">电话号码</string>
+    <string name="note_type_email">电子邮件</string>
+    <string name="note_type_uri">网址</string>
+    <string name="note_type_password">密码</string>
+    <string name="note_type_number_password">数字密码</string>
+    <string name="note_type_decimal">小数</string>
+    <!-- TRANSLATOR: Name of the short note compilation -->
+    <string name="short_note_complication">笔记（短）</string>
+    <!-- TRANSLATOR: Name of the long note compilation -->
+    <string name="long_note_complication">笔记（长）</string>
+    <!--
+        TRANSLATOR: Sample note content to display in the Short Note Compilation.
+        Do not exceed 7 characters.
+    -->
+    <string name="sample_note_short">我的笔记</string>
+    <!-- TRANSLATOR: Sample note content to display in the Long Note Compilation -->
+    <string name="sample_note_long">你好，世界！</string>
+    <string name="button_save">保存</string>
+</resources>

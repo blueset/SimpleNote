@@ -58,7 +58,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
     LaunchedEffect(viewModel.noteContentFlow) {
         viewModel.noteContentFlow.collect {
             Log.d("Edit", "Edit update savedValue to: $it")
-            savedValue.value = savedValue.value.copy(text = it)
+            savedValue.value = savedValue.value.copy(text = it, selection = TextRange(it.length))
         }
     }
 
@@ -96,6 +96,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                         )
                         LaunchedEffect(Unit) {
                             focusRequester.requestFocus()
+                            savedValue.value = savedValue.value.copy(selection = TextRange(savedValue.value.text.length))
                         }
                     },
                     onClick = {
@@ -126,7 +127,7 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                 ) {
                     Icon(
                         imageVector = Icons.Default.Done,
-                        contentDescription = stringResource(R.string.save),
+                        contentDescription = stringResource(R.string.button_save),
                     )
                 }
             }

@@ -158,7 +158,7 @@ private fun tileLayout(
         )
         .setPrimaryChipContent(
             CompactChip.Builder(
-                context, resources.getString(R.string.edit), ModifiersBuilders.Clickable.Builder()
+                context, resources.getString(R.string.button_edit), ModifiersBuilders.Clickable.Builder()
                     .setId("editNote")
                     .setOnClick(ActionBuilders.LoadAction.Builder().build())
                     .build(),
