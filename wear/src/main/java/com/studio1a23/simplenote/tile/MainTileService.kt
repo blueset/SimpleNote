@@ -1,5 +1,6 @@
 package com.studio1a23.simplenote.tile
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
@@ -49,17 +50,7 @@ class MainTileService : SuspendingTileService() {
     override suspend fun tileRequest(
         requestParams: RequestBuilders.TileRequest
     ): TileBuilders.Tile {
-        val lastClickableId = requestParams.currentState.lastClickableId
-        if (lastClickableId == "editNote") {
-            TaskStackBuilder.create(this)
-                .addNextIntentWithParentStack(
-                    Intent(applicationContext, MainActivity::class.java).putExtra(
-                        "destination",
-                        "edit"
-                    )
-                )
-                .startActivities()
-        }
+
 
         val noteContent = getNoteContent(application) ?: resources.getString(R.string.empty_note)
 
@@ -89,6 +80,16 @@ class MainTileService : SuspendingTileService() {
             getUpdater(applicationContext).requestUpdate(MainTileService::class.java)
         }
     }
+}
+
+private fun editNotePendingIntent(context: Context): PendingIntent {
+    val editIntent = Intent(context, MainActivity::class.java).putExtra(
+        "destination",
+        "edit",
+    )
+    return TaskStackBuilder.create(context)
+        .addNextIntentWithParentStack(editIntent)
+        .getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 private fun tileLayout(
@@ -158,9 +159,19 @@ private fun tileLayout(
         )
         .setPrimaryChipContent(
             CompactChip.Builder(
-                context, resources.getString(R.string.button_edit), ModifiersBuilders.Clickable.Builder()
+                context,
+                resources.getString(R.string.button_edit),
+                ModifiersBuilders.Clickable.Builder()
                     .setId("editNote")
-                    .setOnClick(ActionBuilders.LoadAction.Builder().build())
+                    .setOnClick(
+                        ActionBuilders.LaunchAction.Builder()
+                            .setAndroidActivity(
+                                ActionBuilders.AndroidActivity.Builder()
+                                    .setPendingIntent(editNotePendingIntent(context))
+                                    .build()
+                            )
+                            .build()
+                    )
                     .build(),
                 deviceParameters
             )
