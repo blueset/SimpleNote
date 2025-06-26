@@ -89,7 +89,10 @@ private fun editNotePendingIntent(context: Context): PendingIntent {
     )
     return TaskStackBuilder.create(context)
         .addNextIntentWithParentStack(editIntent)
-        .getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        .getPendingIntent(
+            0,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )!!
 }
 
 private fun tileLayout(
