@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.AndroidViewModel
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
@@ -54,19 +55,24 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     @SuppressLint("VisibleForTests")
     fun loadData() {
         Log.d("dataMap", "Loading data.")
-        val dataItems = dataClient.getDataItems(Uri.parse("wear://*/note"))
-        dataItems.addOnSuccessListener { items ->
+        dataClient.getDataItems(Uri.parse("wear://*/note")).addOnSuccessListener { items ->
             items.forEach { item ->
                 val dataMap = DataMapItem.fromDataItem(item).dataMap
                 Log.d("dataMap", "Loading data map: $dataMap")
                 if (dataMap.containsKey("note")) {
-                    noteContentFlow.value = dataMap.getString("note") ?: ""
+                    dataMap.getAsset("note")?.let { asset ->
+                        dataClient.getFdForAsset(asset).addOnSuccessListener { fd ->
+                            val contents = fd.inputStream.bufferedReader().readText()
+                            noteContentFlow.value = contents
+                        }
+                    }
                 }
                 if (dataMap.containsKey("type")) {
                     noteType.value = dataMap.getString("type") ?: "Text"
                 }
                 if (dataMap.containsKey("history")) {
-                    noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList("history"))
+                    noteHistoriesFlow.value =
+                        NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList("history"))
                 }
             }
             items.release()
@@ -100,7 +106,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     fun saveToDataClient() {
         val request = PutDataMapRequest.create("/note").apply {
             dataMap.putString("type", noteType.value)
-            dataMap.putString("note", noteContentFlow.value)
+            dataMap.putAsset("note", Asset.createFromBytes(noteContentFlow.value.toByteArray()))
             dataMap.putDataMapArrayList("history", ArrayList(
                 noteHistoriesFlow.value
                     .sortedBy { it.timestamp }
@@ -134,13 +140,20 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
                 dataMap.keySet().forEach {
                     if (it == "note") {
-                        noteContentFlow.value = dataMap.getString(it) ?: ""
+                        dataMap.getAsset(it)?.let { asset ->
+                            dataClient.getFdForAsset(asset)
+                                .addOnSuccessListener { fd ->
+                                    val contents = fd.inputStream.bufferedReader().readText()
+                                    noteContentFlow.value = contents
+                                }
+                        }
                     }
                     if (it == "type") {
                         noteType.value = dataMap.getString(it) ?: ""
                     }
                     if (it == "history") {
-                        noteHistoriesFlow.value = NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList(it))
+                        noteHistoriesFlow.value =
+                            NoteHistory.fromArrayListDataMap(dataMap.getDataMapArrayList(it))
                     }
                 }
             }

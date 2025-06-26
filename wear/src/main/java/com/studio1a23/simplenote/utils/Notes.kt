@@ -13,7 +13,9 @@ suspend fun getNoteContent(context: Context): String? {
     dataItems.forEach { item ->
         val dataMap = DataMapItem.fromDataItem(item).dataMap
         if (dataMap.containsKey("note")) {
-            noteContent = dataMap.getString("note")
+            val asset = dataMap.getAsset("note")
+            val fd = asset?.let { dataClient.getFdForAsset(it).await() }
+            noteContent = fd?.inputStream?.bufferedReader()?.readText()
         }
     }
     dataItems.release()
