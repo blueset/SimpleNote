@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.studio1a23.simplenote"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.studio1a23.simplenote"
@@ -45,6 +45,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    lint {
+        disable.add("NullSafeMutableLiveData")
     }
 }
 
