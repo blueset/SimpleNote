@@ -10,6 +10,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,20 +35,23 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.createGraph
-import androidx.wear.compose.material.Card
-import androidx.wear.compose.material.ChipDefaults
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.ListHeader
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.Card
+import androidx.wear.compose.material3.CardDefaults
+import androidx.wear.compose.material3.CompactButton
+import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.CompactChip
 import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.presentation.theme.SimpleNoteTheme
 import com.studio1a23.simplenote.ui.Edit
@@ -138,44 +145,58 @@ fun WearApp(
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun Greeting(noteContent: String, onNavEdit: () -> Unit = {}, onNavHistory: () -> Unit = {}) {
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ScalingLazyColumnDefaults.ItemType.Icon,
-            last = ScalingLazyColumnDefaults.ItemType.Chip
-        ),
-    )
-    ScalingLazyColumn(
-        columnState = columnState,
-        modifier = Modifier.fillMaxSize()
+    val columnState = rememberScalingLazyListState()
+    ScreenScaffold(
+        columnState,
+        contentPadding = PaddingValues(16.dp, 16.dp),
+        edgeButtonSpacing = 8.dp,
+        edgeButton = {
+            EdgeButton(onClick = onNavEdit) { Text(stringResource(R.string.button_edit)) }
+        }
     ) {
-        item {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.caption2,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-        }
-        item {
-            Card(onClick = {}, enabled = false) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    color = if (noteContent.isNotBlank()) MaterialTheme.colors.primary else MaterialTheme.colors.onSurfaceVariant,
-                    fontStyle = if (noteContent.isNotBlank()) FontStyle.Normal else FontStyle.Italic,
-                    fontWeight = FontWeight.Normal,
-                    text = noteContent.ifBlank { stringResource(R.string.empty_note) },
-                )
+        contentPadding ->
+        ScalingLazyColumn(
+            state = columnState,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
+            contentPadding = contentPadding,
+            autoCentering = null,
+        ) {
+            item {
+                ListHeader {
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
             }
-        }
-        item {
-            CompactChip(label = stringResource(R.string.button_edit), onClick = onNavEdit)
-        }
-        item {
-            CompactChip(
-                label = stringResource(R.string.button_history),
-                onClick = onNavHistory,
-                colors = ChipDefaults.secondaryChipColors()
-            )
+            item {
+                Card(onClick = {}, enabled = false) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .defaultMinSize(minHeight = CardDefaults.Height - CardDefaults.ContentPadding.calculateTopPadding() - CardDefaults.ContentPadding.calculateBottomPadding())
+                            .padding(0.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            color = if (noteContent.isNotBlank()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryDim,
+                            fontStyle = if (noteContent.isNotBlank()) FontStyle.Normal else FontStyle.Italic,
+                            fontWeight = FontWeight.Normal,
+                            text = noteContent.ifBlank { stringResource(R.string.empty_note) },
+                        )
+                    }
+                }
+            }
+            item {
+                CompactButton(
+                    onClick = onNavHistory,
+                    colors = ButtonDefaults.outlinedButtonColors(),
+                    border = ButtonDefaults.outlinedButtonBorder(true),
+                    modifier = Modifier.padding(0.dp)
+                ) { Text(stringResource(R.string.button_history)) }
+            }
         }
     }
 }

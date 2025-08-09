@@ -3,23 +3,21 @@ package com.studio1a23.simplenote.tile
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
-import androidx.wear.protolayout.ActionBuilders
-import androidx.wear.protolayout.ColorBuilders.argb
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.StateBuilders
 import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.expression.AppDataKey
 import androidx.wear.protolayout.expression.DynamicBuilders
 import androidx.wear.protolayout.expression.DynamicDataBuilders
-import androidx.wear.protolayout.material.ChipColors
-import androidx.wear.protolayout.material.Colors
-import androidx.wear.protolayout.material.CompactChip
-import androidx.wear.protolayout.material.Text
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.material3.Typography
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textEdgeButton
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.tooling.preview.Preview
@@ -96,84 +94,76 @@ private fun tileLayout(
     deviceParameters: DeviceParametersBuilders.DeviceParameters,
     noteContent: String = ""
 ): LayoutElementBuilders.LayoutElement {
-    val chipColors = ChipColors.primaryChipColors(Colors.DEFAULT)
-    val resources = context.resources
-    return PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, resources.getString(R.string.app_name))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(argb(Colors.DEFAULT.primary))
-                .build()
-        )
-        .setContent(
-            Text.Builder(
-                context,
-//                TypeBuilders.StringProp.Builder(noteContent).setDynamicValue(
-//                    DynamicBuilders.DynamicString.from(KEY_NOTE)
-//                ).build(), TypeBuilders.StringLayoutConstraint.Builder("1234567890\n1234567890").build()
-                noteContent.ifEmpty { resources.getString(R.string.empty_note) }
-            )
-                .setColor(argb(Colors.DEFAULT.onSurface))
-                .setTypography(
+    return materialScope(
+        context = context,
+        deviceConfiguration = deviceParameters,
+        allowDynamicTheme = true,
+    ) {
+        val resources = context.resources
+
+        primaryLayout(
+            titleSlot = {
+                text(resources.getString(R.string.app_name).layoutString)
+            },
+            mainSlot = {
+                text(
+                    noteContent.ifEmpty { resources.getString(R.string.empty_note) }.layoutString,
+                    maxLines = 8,
+                    typography =
                     if (noteContent.isBlank())
-                        Typography.TYPOGRAPHY_BODY1
+                        Typography.TITLE_LARGE
                     else
                         when (deviceParameters.screenWidthDp) {
                             in 0..224 ->
                                 when (noteContent.length) {
-                                    in 0..4 -> Typography.TYPOGRAPHY_DISPLAY1
-                                    in 5..8 -> Typography.TYPOGRAPHY_DISPLAY2
-                                    in 9..10 -> Typography.TYPOGRAPHY_DISPLAY3
-                                    in 11..12 -> Typography.TYPOGRAPHY_TITLE1
-                                    in 13..24 -> Typography.TYPOGRAPHY_TITLE2
-                                    in 25..40 -> Typography.TYPOGRAPHY_TITLE3
-                                    in 41..44 -> Typography.TYPOGRAPHY_BODY2
-                                    in 45..52 -> Typography.TYPOGRAPHY_CAPTION2
-                                    else -> Typography.TYPOGRAPHY_CAPTION3
+                                    in 0..2   -> Typography.NUMERAL_EXTRA_LARGE
+                                    in 3..3   -> Typography.NUMERAL_LARGE
+                                    in 4..4   -> Typography.DISPLAY_LARGE
+                                    in 5..10  -> Typography.DISPLAY_MEDIUM
+                                    in 11..12 -> Typography.DISPLAY_SMALL
+                                    in 13..24 -> Typography.LABEL_LARGE
+                                    in 25..27 -> Typography.TITLE_LARGE
+                                    in 28..36 -> Typography.BODY_LARGE
+                                    in 37..40 -> Typography.LABEL_MEDIUM
+                                    in 41..44 -> Typography.BODY_MEDIUM
+                                    in 45..48 -> Typography.LABEL_SMALL
+                                    in 49..65 -> Typography.BODY_SMALL
+                                    else ->            Typography.BODY_EXTRA_SMALL
                                 }
 
                             else ->
                                 when (noteContent.length) {
-                                    in 0..8 -> Typography.TYPOGRAPHY_DISPLAY1
-                                    in 9..10 -> Typography.TYPOGRAPHY_DISPLAY2
-                                    in 11..12 -> Typography.TYPOGRAPHY_DISPLAY3
-                                    in 13..24 -> Typography.TYPOGRAPHY_TITLE1
-                                    in 25..36 -> Typography.TYPOGRAPHY_TITLE2
-                                    in 37..48 -> Typography.TYPOGRAPHY_TITLE3
-                                    in 49..52 -> Typography.TYPOGRAPHY_BODY2
-                                    in 53..64 -> Typography.TYPOGRAPHY_CAPTION2
-                                    else -> Typography.TYPOGRAPHY_CAPTION3
+                                    in 0..3    -> Typography.NUMERAL_EXTRA_LARGE
+                                    in 4..6    -> Typography.NUMERAL_LARGE
+                                    in 7..8    -> Typography.DISPLAY_LARGE
+                                    in 9..18   -> Typography.DISPLAY_MEDIUM
+                                    in 19..21  -> Typography.DISPLAY_SMALL
+                                    in 22..36  -> Typography.LABEL_LARGE
+                                    in 37..50  -> Typography.TITLE_LARGE
+                                    in 51..55  -> Typography.BODY_LARGE
+                                    in 56..72  -> Typography.LABEL_MEDIUM
+                                    in 73..78  -> Typography.BODY_MEDIUM
+                                    in 79..84  -> Typography.LABEL_SMALL
+                                    in 85..105 -> Typography.BODY_SMALL
+                                    else ->             Typography.BODY_EXTRA_SMALL
                                 }
-                        }
+                        },
+                    italic = noteContent.isBlank(),
+                    color = if (noteContent.isBlank()) colorScheme.primaryDim else colorScheme.primary,
                 )
-                .also {
-                    if (noteContent.isBlank()) {
-                        it.setItalic(true).setColor(argb(Colors.DEFAULT.onSurface and 0x7FFFFFFF))
-                    }
-                }
-                .setMaxLines(if (deviceParameters.screenWidthDp < 225) 5 else 7)
-                .setOverflow(LayoutElementBuilders.TEXT_OVERFLOW_UNDEFINED)
-                .build()
+            },
+            bottomSlot = {
+                textEdgeButton(
+                    labelContent = { text(resources.getString(R.string.button_edit).layoutString) },
+                    onClick = clickable(id = "editNote")
+                )
+            }
         )
-        .setPrimaryChipContent(
-            CompactChip.Builder(
-                context, resources.getString(R.string.button_edit), ModifiersBuilders.Clickable.Builder()
-                    .setId("editNote")
-                    .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                    .build(),
-                deviceParameters
-            )
-                .setChipColors(chipColors)
-                .build()
-
-        ).build()
+    }
 }
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.RECT)
-@Preview(device = WearDevices.SQUARE)
 fun tilePreview(context: Context) = TilePreviewData(
     onTileRequest = { request ->
         TilePreviewHelper.singleTimelineEntryTileBuilder(

@@ -3,8 +3,10 @@ package com.studio1a23.simplenote.ui
 import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,29 +25,26 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ChipDefaults
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.CompactButton
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.CompactChip
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.EdgeButton
 import com.studio1a23.simplenote.R
 import com.studio1a23.simplenote.viewModel.MainViewModel
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> Unit) {
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ScalingLazyColumnDefaults.ItemType.Chip,
-            last = ScalingLazyColumnDefaults.ItemType.SingleButton
-        )
-    )
+    val columnState = rememberScalingLazyListState()
     val savedValue = remember {
         mutableStateOf(
             TextFieldValue(
@@ -62,73 +61,80 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
         }
     }
 
-    ScreenScaffold(scrollState = columnState) {
+    ScreenScaffold(
+        scrollState = columnState,
+        contentPadding = PaddingValues(16.dp, 48.dp),
+        edgeButtonSpacing = 0.dp,
+        edgeButton = {
+        EdgeButton(
+            onClick = {
+                viewModel.saveNote(savedValue.value.text)
+                onSave()
+            },
+        ) {
+            Icon(
+                imageVector = Icons.Default.Done,
+                contentDescription = stringResource(R.string.button_save),
+                modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
+        }
+    }) {
+        contentPadding ->
         ScalingLazyColumn(
-            columnState = columnState,
-            modifier = Modifier.fillMaxSize()
+            state = columnState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
+            autoCentering = null,
         ) {
             item {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 val focusRequester = remember { FocusRequester() }
-                androidx.wear.compose.material.Chip(
-                    label = {
-                        BasicTextField(
-                            value = savedValue.value,
-                            onValueChange = {
-                                savedValue.value = it
-                            },
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Done,
-                                keyboardType = viewModel.noteTypeEnum.value,
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    keyboardController?.hide()
-                                }
-                            ),
-                            textStyle = androidx.compose.ui.text.TextStyle(
-                                color = MaterialTheme.colors.onSurface,
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colors.surface)
-                                .focusRequester(focusRequester),
-                        )
-                        LaunchedEffect(Unit) {
-                            focusRequester.requestFocus()
-                            savedValue.value = savedValue.value.copy(selection = TextRange(savedValue.value.text.length))
-                        }
-                    },
+                Button (
                     onClick = {
                         focusRequester.requestFocus()
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ChipDefaults.secondaryChipColors(),
-                    contentPadding = ChipDefaults.ContentPadding,
-                )
+                    colors = ButtonDefaults.filledTonalButtonColors(),
+                    contentPadding = ButtonDefaults.ContentPadding,
+                ) {
+                    BasicTextField(
+                        value = savedValue.value,
+                        onValueChange = {
+                            savedValue.value = it
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                            keyboardType = viewModel.noteTypeEnum.value,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                            }
+                        ),
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .focusRequester(focusRequester),
+                    )
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
+                        savedValue.value = savedValue.value.copy(selection = TextRange(savedValue.value.text.length))
+                    }
+                }
             }
             item {
-                CompactChip(
-                    "Note type: ${stringResource(numberFormats.getOrDefault(viewModel.noteType.value, R.string.note_type_text))}",
-                    colors = ChipDefaults.secondaryChipColors(),
+                CompactButton(
+                    colors = ButtonDefaults.outlinedButtonColors(),
+                    border = ButtonDefaults.outlinedButtonBorder(true),
                     onClick = {
                         viewModel.saveNote(savedValue.value.text)
                         onChangeNoteType()
                     }
-                )
-            }
-            item {
-                Button(
-                    onClick = {
-                        viewModel.saveNote(savedValue.value.text)
-                        onSave()
-                    },
-                    enabled = true,
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Done,
-                        contentDescription = stringResource(R.string.button_save),
-                    )
+                    Text("Note type: ${stringResource(numberFormats.getOrDefault(viewModel.noteType.value, R.string.note_type_text))}")
                 }
             }
         }

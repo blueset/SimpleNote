@@ -11,8 +11,8 @@ android {
         applicationId = "com.studio1a23.simplenote"
         minSdk = 30
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -56,12 +56,13 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.tiles)
     implementation(libs.androidx.tiles.material)
+    implementation(libs.androidx.protolayout.material3)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.compose.layout)
     implementation(libs.horologist.compose.material)
