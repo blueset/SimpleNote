@@ -98,6 +98,7 @@ private fun tileLayout(
         context = context,
         deviceConfiguration = deviceParameters,
         allowDynamicTheme = true,
+        defaultColorScheme = darkScheme
     ) {
         val resources = context.resources
 

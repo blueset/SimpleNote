@@ -16,6 +16,6 @@ fun SimpleNoteTheme(
     val dynamicColorScheme = dynamicColorScheme(LocalContext.current)
     MaterialTheme(
         content = content,
-        colorScheme = dynamicColorScheme ?: MaterialTheme.colorScheme,
+        colorScheme = dynamicColorScheme ?: darkScheme,
     )
 }
