@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.studio1a23.simplenote"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.studio1a23.simplenote"
         minSdk = 30
-        targetSdk = 34
-        versionCode = 6
-        versionName = "1.0.5"
+        targetSdk = 35
+        versionCode = 7
+        versionName = "1.0.6"
         vectorDrawables {
             useSupportLibrary = true
         }

@@ -20,6 +20,7 @@ import com.studio1a23.simplenote.complication.LongComplicationService
 import com.studio1a23.simplenote.complication.ShortComplicationService
 import com.studio1a23.simplenote.data.NoteHistory
 import com.studio1a23.simplenote.tile.MainTileService
+import com.studio1a23.simplenote.utils.NoteCache
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -64,6 +65,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                         dataClient.getFdForAsset(asset).addOnSuccessListener { fd ->
                             val contents = fd.inputStream.bufferedReader().readText()
                             noteContentFlow.value = contents
+                            NoteCache.set(application, contents)
                         }
                     }
                 }
@@ -89,6 +91,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
     fun saveNote(note: String) {
         Log.d("dataMap", "Saving note: $note")
         noteContentFlow.value = note
+        NoteCache.set(application, note)
         if (note.isNotBlank() && noteHistoriesFlow.value.lastOrNull()?.note != note) {
             noteHistoriesFlow.value.add(NoteHistory(note, System.currentTimeMillis()))
         }
@@ -145,6 +148,7 @@ class MainViewModel(private val application: Application) : AndroidViewModel(app
                                 .addOnSuccessListener { fd ->
                                     val contents = fd.inputStream.bufferedReader().readText()
                                     noteContentFlow.value = contents
+                                    NoteCache.set(application, contents)
                                 }
                         }
                     }

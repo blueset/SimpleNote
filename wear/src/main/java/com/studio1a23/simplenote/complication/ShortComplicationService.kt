@@ -44,7 +44,7 @@ class ShortComplicationService : SuspendingComplicationDataSourceService() {
                 MonochromaticImage.Builder(
                     Icon.createWithResource(
                         application,
-                        R.drawable.ic_note
+                        R.mipmap.ic_note
                     )
                 ).build()
             )
