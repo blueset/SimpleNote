@@ -18,7 +18,7 @@ This lightweight app lets you quickly note down and edit a single piece of impor
 
 * Visit https://groups.google.com/g/1a23-apk-closed-testing and join the group with your Google account
 * Visit https://play.google.com/apps/testing/com.studio1a23.simplenote, log in with the same Google account and click “Join the program”
-* Visit [Simple Memo – Apps on Google Play](https://play.google.com/apps/testing/com.studio1a23.simplenote) to install the app to your watch.
+* Visit [Simple Memo – Apps on Google Play](https://play.google.com/store/apps/details?id=com.studio1a23.simplenote) to install the app to your watch.
 
 ## License
 
