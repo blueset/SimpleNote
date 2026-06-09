@@ -4,6 +4,8 @@ Simple Memo for Wear OS keeps your essential information just a glance away on y
 
 This lightweight app lets you quickly note down and edit a single piece of important information right on your Wear OS watch. Access your memo instantly through the app, a customizable watch face complication, or a convenient Wear OS tile.
 
+<a href="https://play.google.com/store/apps/details?id=com.studio1a23.simplenote"><img alt="Get it on Google Play" src="./assets/GetItOnGooglePlay_Badge_Web_color_English.svg" width="300"/></a>
+
 | ![Quick access to your essential notes](assets/Screenshot%200.png) | ![Integrated watchface complications](assets/Screenshot%202.png) | ![Keep information at a glance](assets/Screenshot%203.png) | ![Choose your preferred keyboard options](assets/Screenshot%201.png) | ![Track your edit history](assets/Screenshot%204.png) |
 | :--: | :--: | :--: | :--: | :--: |
 
@@ -14,11 +16,6 @@ This lightweight app lets you quickly note down and edit a single piece of impor
 * **Watch face complications**: Keep your note visible at all times
 * **Edit history**: Track your last 10 changes
 
-## Join beta test
-
-* Visit https://groups.google.com/g/1a23-apk-closed-testing and join the group with your Google account
-* Visit https://play.google.com/apps/testing/com.studio1a23.simplenote, log in with the same Google account and click “Join the program”
-* Visit [Simple Memo – Apps on Google Play](https://play.google.com/store/apps/details?id=com.studio1a23.simplenote) to install the app to your watch.
 
 ## License
 
