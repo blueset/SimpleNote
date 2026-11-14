@@ -134,7 +134,12 @@ fun Edit(viewModel: MainViewModel, onSave: () -> Unit, onChangeNoteType: () -> U
                         onChangeNoteType()
                     }
                 ) {
-                    Text("Note type: ${stringResource(numberFormats.getOrDefault(viewModel.noteType.value, R.string.note_type_text))}")
+                    Text(
+                        stringResource(
+                            R.string.note_type_format,
+                            stringResource(numberFormats.getOrDefault(viewModel.noteType.value, R.string.note_type_text)),
+                        )
+                    )
                 }
             }
         }

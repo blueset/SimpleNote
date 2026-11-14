@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Изменить</string>
+    <string name="button_history">История</string>
+    <string name="empty_note">Заметка пуста.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Пусто</string>
+    <string name="note_type">Тип заметки</string>
+    <string name="note_type_format">Тип заметки: %1$s</string>
+    <string name="title_edit_history">История изменений</string>
+    <string name="no_history">Нет истории</string>
+    <string name="note_type_number">Число</string>
+    <string name="note_type_text">Текст</string>
+    <string name="note_type_ascii">Код (ASCII)</string>
+    <string name="note_type_phone">Номер телефона</string>
+    <string name="note_type_email">Эл. почта</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Пароль</string>
+    <string name="note_type_number_password">Цифровой пароль</string>
+    <string name="note_type_decimal">Десятичное число</string>
+    <string name="short_note_complication">Заметка (короткая)</string>
+    <string name="long_note_complication">Заметка (длинная)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Заметка</string>
+    <string name="sample_note_long">Привет, мир!</string>
+    <string name="button_save">Сохранить</string>
+</resources>

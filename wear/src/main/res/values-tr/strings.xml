@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Düzenle</string>
+    <string name="button_history">Geçmiş</string>
+    <string name="empty_note">Not boş.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Boş</string>
+    <string name="note_type">Not türü</string>
+    <string name="note_type_format">Not türü: %1$s</string>
+    <string name="title_edit_history">Düzenleme geçmişi</string>
+    <string name="no_history">Geçmiş yok</string>
+    <string name="note_type_number">Sayı</string>
+    <string name="note_type_text">Metin</string>
+    <string name="note_type_ascii">Kod (ASCII)</string>
+    <string name="note_type_phone">Telefon numarası</string>
+    <string name="note_type_email">E-posta</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Şifre</string>
+    <string name="note_type_number_password">Sayısal şifre</string>
+    <string name="note_type_decimal">Ondalık sayı</string>
+    <string name="short_note_complication">Not (kısa)</string>
+    <string name="long_note_complication">Not (uzun)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Notum</string>
+    <string name="sample_note_long">Merhaba, dünya!</string>
+    <string name="button_save">Kaydet</string>
+</resources>

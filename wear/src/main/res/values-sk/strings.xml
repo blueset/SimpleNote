@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Upraviť</string>
+    <string name="button_history">História</string>
+    <string name="empty_note">Poznámka je prázdna.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Prázdne</string>
+    <string name="note_type">Typ poznámky</string>
+    <string name="note_type_format">Typ poznámky: %1$s</string>
+    <string name="title_edit_history">História úprav</string>
+    <string name="no_history">Žiadna história</string>
+    <string name="note_type_number">Číslo</string>
+    <string name="note_type_text">Text</string>
+    <string name="note_type_ascii">Kód (ASCII)</string>
+    <string name="note_type_phone">Telefónne číslo</string>
+    <string name="note_type_email">E-mail</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Heslo</string>
+    <string name="note_type_number_password">Číselné heslo</string>
+    <string name="note_type_decimal">Desatinné číslo</string>
+    <string name="short_note_complication">Poznámka (krátka)</string>
+    <string name="long_note_complication">Poznámka (dlhá)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Odkaz</string>
+    <string name="sample_note_long">Ahoj, svet!</string>
+    <string name="button_save">Uložiť</string>
+</resources>

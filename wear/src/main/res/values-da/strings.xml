@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Rediger</string>
+    <string name="button_history">Historik</string>
+    <string name="empty_note">Noten er tom.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Tom</string>
+    <string name="note_type">Notetype</string>
+    <string name="note_type_format">Notetype: %1$s</string>
+    <string name="title_edit_history">Redigeringshistorik</string>
+    <string name="no_history">Ingen historik</string>
+    <string name="note_type_number">Tal</string>
+    <string name="note_type_text">Tekst</string>
+    <string name="note_type_ascii">Kode (ASCII)</string>
+    <string name="note_type_phone">Telefonnummer</string>
+    <string name="note_type_email">E-mail</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Adgangskode</string>
+    <string name="note_type_number_password">Numerisk adgangskode</string>
+    <string name="note_type_decimal">Decimaltal</string>
+    <string name="short_note_complication">Note (kort)</string>
+    <string name="long_note_complication">Note (lang)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Note</string>
+    <string name="sample_note_long">Hej, verden!</string>
+    <string name="button_save">Gem</string>
+</resources>

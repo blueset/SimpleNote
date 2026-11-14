@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Modifier</string>
+    <string name="button_history">Historique</string>
+    <string name="empty_note">La note est vide.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Vide</string>
+    <string name="note_type">Type de note</string>
+    <string name="note_type_format">Type de note : %1$s</string>
+    <string name="title_edit_history">Historique des modifications</string>
+    <string name="no_history">Aucun historique</string>
+    <string name="note_type_number">Nombre</string>
+    <string name="note_type_text">Texte</string>
+    <string name="note_type_ascii">Code (ASCII)</string>
+    <string name="note_type_phone">Numéro de téléphone</string>
+    <string name="note_type_email">E-mail</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Mot de passe</string>
+    <string name="note_type_number_password">Mot de passe numérique</string>
+    <string name="note_type_decimal">Nombre décimal</string>
+    <string name="short_note_complication">Note (courte)</string>
+    <string name="long_note_complication">Note (longue)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Ma note</string>
+    <string name="sample_note_long">Bonjour, le monde !</string>
+    <string name="button_save">Enregistrer</string>
+</resources>

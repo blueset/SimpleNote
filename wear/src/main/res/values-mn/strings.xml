@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Засах</string>
+    <string name="button_history">Түүх</string>
+    <string name="empty_note">Тэмдэглэл хоосон байна.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Хоосон</string>
+    <string name="note_type">Тэмдэглэлийн төрөл</string>
+    <string name="note_type_format">Тэмдэглэлийн төрөл: %1$s</string>
+    <string name="title_edit_history">Засварын түүх</string>
+    <string name="no_history">Түүх байхгүй</string>
+    <string name="note_type_number">Тоо</string>
+    <string name="note_type_text">Текст</string>
+    <string name="note_type_ascii">Код (ASCII)</string>
+    <string name="note_type_phone">Утасны дугаар</string>
+    <string name="note_type_email">Цахим шуудан</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Нууц үг</string>
+    <string name="note_type_number_password">Тоон нууц үг</string>
+    <string name="note_type_decimal">Аравтын бутархай</string>
+    <string name="short_note_complication">Тэмдэглэл (богино)</string>
+    <string name="long_note_complication">Тэмдэглэл (урт)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Сайн уу</string>
+    <string name="sample_note_long">Сайн уу, дэлхий!</string>
+    <string name="button_save">Хадгалах</string>
+</resources>

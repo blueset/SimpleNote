@@ -11,6 +11,8 @@
     -->
     <string name="empty_note_short">N/A</string>
     <string name="note_type">Note type</string>
+    <!-- TRANSLATOR: Note type label followed by the selected type. -->
+    <string name="note_type_format">Note type: %1$s</string>
     <!-- TRANSLATOR: Edit history (noun, title of page) -->
     <string name="title_edit_history">Edit history</string>
     <string name="no_history">No history</string>

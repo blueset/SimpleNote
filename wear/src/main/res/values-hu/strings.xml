@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Szerkesztés</string>
+    <string name="button_history">Előzmények</string>
+    <string name="empty_note">A jegyzet üres.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Üres</string>
+    <string name="note_type">Jegyzet típusa</string>
+    <string name="note_type_format">Jegyzet típusa: %1$s</string>
+    <string name="title_edit_history">Szerkesztési előzmények</string>
+    <string name="no_history">Nincsenek előzmények</string>
+    <string name="note_type_number">Szám</string>
+    <string name="note_type_text">Szöveg</string>
+    <string name="note_type_ascii">Kód (ASCII)</string>
+    <string name="note_type_phone">Telefonszám</string>
+    <string name="note_type_email">E-mail</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Jelszó</string>
+    <string name="note_type_number_password">Számjegyes jelszó</string>
+    <string name="note_type_decimal">Tizedes szám</string>
+    <string name="short_note_complication">Jegyzet (rövid)</string>
+    <string name="long_note_complication">Jegyzet (hosszú)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Jegyzet</string>
+    <string name="sample_note_long">Helló, világ!</string>
+    <string name="button_save">Mentés</string>
+</resources>

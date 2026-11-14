@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_history">Riwayat</string>
+    <string name="empty_note">Catatan kosong.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Kosong</string>
+    <string name="note_type">Jenis catatan</string>
+    <string name="note_type_format">Jenis catatan: %1$s</string>
+    <string name="title_edit_history">Riwayat pengeditan</string>
+    <string name="no_history">Tidak ada riwayat</string>
+    <string name="note_type_number">Angka</string>
+    <string name="note_type_text">Teks</string>
+    <string name="note_type_ascii">Kode (ASCII)</string>
+    <string name="note_type_phone">Nomor telepon</string>
+    <string name="note_type_email">Email</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Kata sandi</string>
+    <string name="note_type_number_password">Kata sandi numerik</string>
+    <string name="note_type_decimal">Angka desimal</string>
+    <string name="short_note_complication">Catatan (pendek)</string>
+    <string name="long_note_complication">Catatan (panjang)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Catatan</string>
+    <string name="sample_note_long">Halo, dunia!</string>
+    <string name="button_save">Simpan</string>
+</resources>

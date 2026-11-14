@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">Muokkaa</string>
+    <string name="button_history">Historia</string>
+    <string name="empty_note">Muistiinpano on tyhjä.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">Tyhjä</string>
+    <string name="note_type">Muistiinpanon tyyppi</string>
+    <string name="note_type_format">Muistiinpanon tyyppi: %1$s</string>
+    <string name="title_edit_history">Muokkaushistoria</string>
+    <string name="no_history">Ei historiaa</string>
+    <string name="note_type_number">Luku</string>
+    <string name="note_type_text">Teksti</string>
+    <string name="note_type_ascii">Koodi (ASCII)</string>
+    <string name="note_type_phone">Puhelinnumero</string>
+    <string name="note_type_email">Sähköposti</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">Salasana</string>
+    <string name="note_type_number_password">Numerosalasana</string>
+    <string name="note_type_decimal">Desimaaliluku</string>
+    <string name="short_note_complication">Muistiinpano (lyhyt)</string>
+    <string name="long_note_complication">Muistiinpano (pitkä)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">Muistio</string>
+    <string name="sample_note_long">Hei, maailma!</string>
+    <string name="button_save">Tallenna</string>
+</resources>

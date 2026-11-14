@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Memo</string>
+    <string name="button_edit">편집</string>
+    <string name="button_history">기록</string>
+    <string name="empty_note">메모가 비어 있습니다.</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="empty_note_short">없음</string>
+    <string name="note_type">메모 유형</string>
+    <string name="note_type_format">메모 유형: %1$s</string>
+    <string name="title_edit_history">편집 기록</string>
+    <string name="no_history">기록 없음</string>
+    <string name="note_type_number">숫자</string>
+    <string name="note_type_text">텍스트</string>
+    <string name="note_type_ascii">코드 (ASCII)</string>
+    <string name="note_type_phone">전화번호</string>
+    <string name="note_type_email">이메일</string>
+    <string name="note_type_uri">URI</string>
+    <string name="note_type_password">비밀번호</string>
+    <string name="note_type_number_password">숫자 비밀번호</string>
+    <string name="note_type_decimal">소수</string>
+    <string name="short_note_complication">메모 (짧게)</string>
+    <string name="long_note_complication">메모 (길게)</string>
+    <!-- TRANSLATOR: Do not exceed 7 characters. -->
+    <string name="sample_note_short">내 메모</string>
+    <string name="sample_note_long">안녕하세요!</string>
+    <string name="button_save">저장</string>
+</resources>
